@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:todoey/models/task.dart';
+import 'package:provider/provider.dart';
+import 'package:todoey/models/data_tasks_list.dart';
 
 class AddTaskScreen extends StatelessWidget {
-  AddTaskScreen({Key? key, required this.addTask}) : super(key: key);
-  final Function addTask;
+  AddTaskScreen({Key? key}) : super(key: key);
+
   late String? _taskName;
   @override
   Widget build(BuildContext context) {
@@ -13,8 +14,7 @@ class AddTaskScreen extends StatelessWidget {
         //
       ),
       child: Container(
-        padding: const EdgeInsets.symmetric(
-            horizontal: 20.0, vertical: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
@@ -28,8 +28,7 @@ class AddTaskScreen extends StatelessWidget {
           children: [
             const Text(
               'Add Task',
-              style: TextStyle(
-                  color: Colors.lightBlueAccent, fontSize: 30.0),
+              style: TextStyle(color: Colors.lightBlueAccent, fontSize: 30.0),
               textAlign: TextAlign.center,
             ),
             TextField(
@@ -44,15 +43,17 @@ class AddTaskScreen extends StatelessWidget {
             ),
             TextButton(
               style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all(Colors.lightBlueAccent),
+                backgroundColor: MaterialStateProperty.all(Colors.lightBlueAccent),
               ),
               child: const Text(
                 'Add',
                 style: TextStyle(color: Colors.white, fontSize: 20.0),
               ),
               onPressed: () {
-                addTask(_taskName);
+                if (_taskName != null) {
+                  context.read<DataTasksList>().addTask(_taskName!);
+                }
+
                 Navigator.pop(context);
               },
             )

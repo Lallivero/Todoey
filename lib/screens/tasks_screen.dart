@@ -1,24 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:todoey/models/task.dart';
+import 'package:todoey/models/data_tasks_list.dart';
 import 'package:todoey/screens/add_task_screen.dart';
 import 'package:todoey/widgets/tasks_list.dart';
+import 'package:provider/provider.dart';
 
-class TasksScreen extends StatefulWidget {
+class TasksScreen extends StatelessWidget {
   const TasksScreen({Key? key}) : super(key: key);
-
-  @override
-  _TasksScreenState createState() => _TasksScreenState();
-}
-
-class _TasksScreenState extends State<TasksScreen> {
-  List<Task> tasks = [
-    Task(name: "Finish the app"),
-    Task(name: "Do something nice")
-  ];
-
-  // void addTask() {
-  //   tasks.add(Task(name: taskName, isDone: isDone));
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -37,19 +24,8 @@ class _TasksScreenState extends State<TasksScreen> {
               builder: (context) => SingleChildScrollView(
                     child: Container(
                       padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context)
-                              .viewInsets
-                              .bottom),
-                      child: AddTaskScreen(
-                        addTask: (newTaskTitle) {
-                          setState(() {
-                            tasks.add(Task(
-                              name: newTaskTitle,
-                              isDone: false,
-                            ));
-                          });
-                        },
-                      ),
+                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                      child: AddTaskScreen(),
                     ),
                   ));
         },
@@ -58,8 +34,8 @@ class _TasksScreenState extends State<TasksScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.only(
-                top: 60.0, left: 30.0, right: 30.0, bottom: 30.0),
+            padding:
+                const EdgeInsets.only(top: 60.0, left: 30.0, right: 30.0, bottom: 30.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -85,7 +61,8 @@ class _TasksScreenState extends State<TasksScreen> {
                   ),
                 ),
                 Text(
-                  "${tasks.length} Tasks",
+                  // "${Provider.of<DataTasksList>(context).getTaskList().length} Tasks"
+                  "${context.watch<DataTasksList>().taskCount} Tasks",
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -103,9 +80,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   topRight: Radius.circular(20.0),
                 ),
               ),
-              child: TasksList(
-                tasks: tasks,
-              ),
+              child: const TasksList(),
             ),
           ),
         ],
